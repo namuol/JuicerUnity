@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class Hittable : MonoBehaviour
 {
+  [SerializeField]
   private AudioSource hitSound;
 
-  // Ideally this could be configured, right?
-  void Awake()
+  public void Hit()
   {
-    hitSound = gameObject.GetComponent<AudioSource>();
-  }
-
-  public void hit()
-  {
-    Debug.Log("Hit!");
-    hitSound.Play();
+    if (hitSound != null)
+    {
+      hitSound.Play();
+    }
   }
 }

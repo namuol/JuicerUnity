@@ -1,11 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-  static float SPEED = 5;
+  private static readonly float SPEED = 5;
 
   [SerializeField]
   private GameObject bulletPrefab;
@@ -24,7 +22,8 @@ public class Player : MonoBehaviour
   private float vertMoveAxis;
   private bool fired;
   private bool firePressed;
-  private int bulletPoolSize = 15;
+
+  private readonly int bulletPoolSize = 15;
   private List<GameObject> bulletPool;
 
   void Awake()
@@ -34,7 +33,7 @@ public class Player : MonoBehaviour
 
     bulletPool = new List<GameObject>();
     GameObject bullet;
-    for (var i = 0; i < bulletPoolSize; ++i)
+    for (int i = 0; i < bulletPoolSize; ++i)
     {
       bullet = Instantiate(bulletPrefab);
       bullet.SetActive(false);
@@ -44,7 +43,7 @@ public class Player : MonoBehaviour
 
   void FixedUpdate()
   {
-    input();
+    HandleInput();
 
     // Movement
     body.velocity = ((Vector3.left * horizMoveAxis) + (Vector3.back * vertMoveAxis)) * SPEED;
@@ -52,7 +51,7 @@ public class Player : MonoBehaviour
     // Weapons
     if (fired)
     {
-      fire();
+      Fire();
     }
     var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
     if (Physics.Raycast(ray, out RaycastHit hit, 999999, aimMask))
@@ -61,9 +60,9 @@ public class Player : MonoBehaviour
     }
   }
 
-  private Bullet getBullet()
+  Bullet GetBullet()
   {
-    for (var i = 0; i < bulletPoolSize; ++i)
+    for (int i = 0; i < bulletPoolSize; ++i)
     {
       if (!bulletPool[i].activeInHierarchy)
       {
@@ -74,29 +73,28 @@ public class Player : MonoBehaviour
     return null;
   }
 
-  private void input()
+  void HandleInput()
   {
-    horizMoveAxis = Input.GetAxis("Horizontal");
-    vertMoveAxis = Input.GetAxis("Vertical");
+    horizMoveAxis = UnityEngine.Input.GetAxis("Horizontal");
+    vertMoveAxis = UnityEngine.Input.GetAxis("Vertical");
 
     // Basically reimplementing `GetButtonDown` but for `FixedUpdate`, here
-    var fireWasPressed = firePressed;
-    firePressed = Input.GetButton("Fire1");
+    bool fireWasPressed = firePressed;
+    firePressed = UnityEngine.Input.GetButton("Fire1");
     fired = !fireWasPressed && firePressed;
   }
 
-  private void fire()
+  void Fire()
   {
     fired = false;
 
-    // Spawn a bullet
-    var bullet = getBullet();
+    Bullet bullet = GetBullet();
     if (!bullet)
     {
       return;
     }
 
     bulletAudio.Play();
-    bullet.shoot(body.position, aimPoint.transform.position);
+    bullet.Shoot(body.position, aimPoint.transform.position);
   }
 }

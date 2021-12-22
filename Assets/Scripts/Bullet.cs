@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
@@ -10,17 +8,17 @@ public class Bullet : MonoBehaviour
   private float activeTime = 0;
   private Rigidbody body;
 
-  void Awake()
+  public void Awake()
   {
     body = GetComponent<Rigidbody>();
   }
 
-  void Start()
+  public void Start()
   {
     activeTime = 0;
   }
 
-  void FixedUpdate()
+  public void FixedUpdate()
   {
     activeTime += 1;
 
@@ -32,7 +30,7 @@ public class Bullet : MonoBehaviour
     }
   }
 
-  public void shoot(Vector3 from, Vector3 to)
+  public void Shoot(Vector3 from, Vector3 to)
   {
     gameObject.SetActive(true);
     activeTime = 0;
@@ -45,9 +43,11 @@ public class Bullet : MonoBehaviour
   public void OnCollisionEnter(Collision collision)
   {
     Debug.Log("OnCollisionEnter: " + collision.gameObject.name);
-    var hittable = collision.gameObject.GetComponent<Hittable>();
+    Hittable hittable = collision.gameObject.GetComponent<Hittable>();
     if (hittable)
-      hittable.hit();
+    {
+      hittable.Hit();
+    }
 
     gameObject.SetActive(false);
   }
