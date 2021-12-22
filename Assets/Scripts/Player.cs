@@ -16,17 +16,22 @@ public class Player : MonoBehaviour
   [SerializeField]
   private LayerMask aimMask;
 
+  // Components
+  private Rigidbody body;
+  private AudioSource bulletAudio;
+
   private float horizMoveAxis;
   private float vertMoveAxis;
   private bool fired;
   private bool firePressed;
-  private Rigidbody body;
   private int bulletPoolSize = 15;
   private List<GameObject> bulletPool;
 
   void Awake()
   {
     body = GetComponent<Rigidbody>();
+    bulletAudio = GetComponent<AudioSource>();
+
     bulletPool = new List<GameObject>();
     GameObject bullet;
     for (var i = 0; i < bulletPoolSize; ++i)
@@ -91,6 +96,7 @@ public class Player : MonoBehaviour
       return;
     }
 
+    bulletAudio.Play();
     bullet.shoot(body.position, aimPoint.transform.position);
   }
 }

@@ -12,9 +12,13 @@ public class Bullet : MonoBehaviour
 
   void Awake()
   {
-    activeTime = 0;
     body = GetComponent<Rigidbody>();
     Debug.Log(body);
+  }
+
+  void Start()
+  {
+    activeTime = 0;
   }
 
   void FixedUpdate()
@@ -32,13 +36,15 @@ public class Bullet : MonoBehaviour
   public void shoot(Vector3 from, Vector3 to)
   {
     gameObject.SetActive(true);
+    activeTime = 0;
     body.angularVelocity = Vector3.zero;
     body.position = from;
     body.velocity = (to - from).normalized * speed;
     gameObject.transform.LookAt(gameObject.transform.position + body.velocity);
   }
 
-  public void OnCollisionEnter() {
+  public void OnCollisionEnter()
+  {
     gameObject.SetActive(false);
   }
 }
