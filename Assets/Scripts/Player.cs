@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
       fire();
     }
     var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    if (Physics.Raycast(ray, out RaycastHit hit, aimMask))
+    if (Physics.Raycast(ray, out RaycastHit hit, 999999, aimMask))
     {
       body.transform.LookAt(hit.point);
     }

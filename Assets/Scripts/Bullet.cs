@@ -5,7 +5,7 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
   [SerializeField]
-  private float speed = 20;
+  private float speed = 40;
 
   private float activeTime = 0;
   private Rigidbody body;
@@ -34,5 +34,6 @@ public class Bullet : MonoBehaviour
     gameObject.SetActive(true);
     body.position = from;
     body.velocity = (to - from).normalized * speed;
+    gameObject.transform.LookAt(gameObject.transform.position + body.velocity);
   }
 }
