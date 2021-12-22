@@ -13,7 +13,6 @@ public class Bullet : MonoBehaviour
   void Awake()
   {
     body = GetComponent<Rigidbody>();
-    Debug.Log(body);
   }
 
   void Start()
@@ -43,8 +42,13 @@ public class Bullet : MonoBehaviour
     gameObject.transform.LookAt(gameObject.transform.position + body.velocity);
   }
 
-  public void OnCollisionEnter()
+  public void OnCollisionEnter(Collision collision)
   {
+    Debug.Log("OnCollisionEnter: " + collision.gameObject.name);
+    var hittable = collision.gameObject.GetComponent<Hittable>();
+    if (hittable)
+      hittable.hit();
+
     gameObject.SetActive(false);
   }
 }
