@@ -13,6 +13,9 @@ public class Player : MonoBehaviour
   [SerializeField]
   private GameObject aimPoint;
 
+  [SerializeField]
+  private LayerMask aimMask;
+
   private float horizMoveAxis;
   private float vertMoveAxis;
   private bool fired;
@@ -46,8 +49,11 @@ public class Player : MonoBehaviour
     {
       fire();
     }
-
-    body.transform.Rotate(new Vector3(0, 0.5f, 0));
+    var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+    if (Physics.Raycast(ray, out RaycastHit hit, aimMask))
+    {
+      body.transform.LookAt(hit.point);
+    }
   }
 
   private Bullet getBullet()
