@@ -78,3 +78,20 @@ follow this pattern, so for now I'm following this pattern, but I'm going to
 look into replacing or reconfiguring `Input` to play nicer with `FixedUpdate` to
 avoid all this extra state management and to allow for (in theory) more precise
 controls.
+
+## Getting mouse position in world coords
+
+I found this tutorial helpful: https://www.youtube.com/watch?v=0jTPKz3ga4w
+
+TLDW: Use something like this:
+
+```c#
+var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+// 999999 is "max cast distance" - it's required if you want to supply a
+// mask to limit your casting to:
+if (Physics.Raycast(ray, out RaycastHit hit, 999999, aimMask))
+{
+  // Rotate body to look at the mouse:
+  body.transform.LookAt(hit.point);
+}
+```
