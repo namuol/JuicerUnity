@@ -39,7 +39,7 @@ public class Player : MonoBehaviour
   void FixedUpdate()
   {
     // Movement
-    body.velocity = ((Vector3.right * horizMoveAxis) + (Vector3.forward * vertMoveAxis)) * SPEED;
+    body.velocity = ((Vector3.left * horizMoveAxis) + (Vector3.back * vertMoveAxis)) * SPEED;
 
     // Weapons
     if (fired)
