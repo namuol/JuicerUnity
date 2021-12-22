@@ -10,6 +10,9 @@ public class Player : MonoBehaviour
   [SerializeField]
   private GameObject bulletPrefab;
 
+  [SerializeField]
+  private GameObject aimPoint;
+
   private float horizMoveAxis;
   private float vertMoveAxis;
   private bool fired;
@@ -18,8 +21,7 @@ public class Player : MonoBehaviour
   private int bulletPoolSize = 15;
   private List<GameObject> bulletPool;
 
-  // Start is called before the first frame update
-  void Start()
+  void Awake()
   {
     body = GetComponent<Rigidbody>();
     bulletPool = new List<GameObject>();
@@ -44,15 +46,17 @@ public class Player : MonoBehaviour
     {
       fire();
     }
+
+    body.transform.Rotate(new Vector3(0, 0.5f, 0));
   }
 
-  private GameObject getBullet()
+  private Bullet getBullet()
   {
     for (var i = 0; i < bulletPoolSize; ++i)
     {
       if (!bulletPool[i].activeInHierarchy)
       {
-        return bulletPool[i];
+        return bulletPool[i].GetComponent<Bullet>();
       }
     }
 
@@ -81,7 +85,6 @@ public class Player : MonoBehaviour
       return;
     }
 
-    bullet.transform.position = body.position;
-    bullet.SetActive(true);
+    bullet.shoot(body.position, aimPoint.transform.position);
   }
 }
