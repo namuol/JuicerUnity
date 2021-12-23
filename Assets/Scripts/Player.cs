@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
   [SerializeField]
   private GameObject aimPoint;
 
+  [SerializeField]
+  private ObjectPool bulletPool;
+
   // Components
   private Rigidbody body;
   private AudioSource bulletAudio;
@@ -19,9 +22,6 @@ public class Player : MonoBehaviour
   private float vertMoveAxis;
   private bool fired;
   private bool firePressed;
-
-  private readonly int bulletPoolSize = 15;
-  private List<GameObject> bulletPool;
 
   // For keyboard controls, we want digital axes:
   private static float ClampAxis(float axis)
@@ -38,15 +38,6 @@ public class Player : MonoBehaviour
   {
     body = GetComponent<Rigidbody>();
     bulletAudio = GetComponent<AudioSource>();
-
-    bulletPool = new List<GameObject>();
-    GameObject bullet;
-    for (int i = 0; i < bulletPoolSize; ++i)
-    {
-      bullet = Instantiate(bulletPrefab);
-      bullet.SetActive(false);
-      bulletPool.Add(bullet);
-    }
   }
 
   void FixedUpdate()
@@ -64,19 +55,6 @@ public class Player : MonoBehaviour
 
   }
 
-  Bullet GetBullet()
-  {
-    for (int i = 0; i < bulletPoolSize; ++i)
-    {
-      if (!bulletPool[i].activeInHierarchy)
-      {
-        return bulletPool[i].GetComponent<Bullet>();
-      }
-    }
-
-    return null;
-  }
-
   void HandleInput()
   {
     horizMoveAxis = ClampAxis(Input.GetAxis("Horizontal"));
@@ -92,7 +70,7 @@ public class Player : MonoBehaviour
   {
     fired = false;
 
-    Bullet bullet = GetBullet();
+    Bullet bullet = bulletPool.GetObject().GetComponent<Bullet>();
     if (!bullet)
     {
       return;
