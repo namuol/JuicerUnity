@@ -11,9 +11,6 @@ public class Player : MonoBehaviour
   [SerializeField]
   private GameObject aimPoint;
 
-  [SerializeField]
-  private LayerMask aimMask;
-
   // Components
   private Rigidbody body;
   private AudioSource bulletAudio;
@@ -53,11 +50,7 @@ public class Player : MonoBehaviour
     {
       Fire();
     }
-    var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-    if (Physics.Raycast(ray, out RaycastHit hit, 999999, aimMask))
-    {
-      body.transform.LookAt(hit.point);
-    }
+
   }
 
   Bullet GetBullet()

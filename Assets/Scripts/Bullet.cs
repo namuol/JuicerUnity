@@ -42,7 +42,6 @@ public class Bullet : MonoBehaviour
 
   public void OnCollisionEnter(Collision collision)
   {
-    Debug.Log("OnCollisionEnter: " + collision.gameObject.name);
     Hittable hittable = collision.gameObject.GetComponent<Hittable>();
     if (hittable)
     {
