@@ -149,7 +149,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!82 &1638319152504041864
 AudioSource:
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toFollow: {fileID: 0}
-  rotationRate: 1
+  rotationRate: 0.03
 --- !u!114 &7203857993556190391
 MonoBehaviour:
   m_ObjectHideFlags: 0

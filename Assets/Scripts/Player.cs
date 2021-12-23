@@ -68,12 +68,12 @@ public class Player : MonoBehaviour
 
   void HandleInput()
   {
-    horizMoveAxis = UnityEngine.Input.GetAxis("Horizontal");
-    vertMoveAxis = UnityEngine.Input.GetAxis("Vertical");
+    horizMoveAxis = Input.GetAxis("Horizontal");
+    vertMoveAxis = Input.GetAxis("Vertical");
 
     // Basically reimplementing `GetButtonDown` but for `FixedUpdate`, here
     bool fireWasPressed = firePressed;
-    firePressed = UnityEngine.Input.GetButton("Fire1");
+    firePressed = Input.GetButton("Fire1");
     fired = !fireWasPressed && firePressed;
   }
 

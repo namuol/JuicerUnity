@@ -8,21 +8,6 @@ using UnityEngine;
 
 public class Follower : MonoBehaviour
 {
-  private float ToRad(float deg)
-  {
-    return deg / 90.0f * Mathf.PI;
-  }
-  private float ToDeg(float rad)
-  {
-    return rad / Mathf.PI * 90.0f;
-  }
-  private float MinAngle(float ang)
-  {
-    return ang;
-    // var rad = ToRad(ang);
-    // return ToDeg(Mathf.Atan2(Mathf.Sin(rad), Mathf.Cos(rad)));
-  }
-
   [SerializeField]
   private GameObject toFollow;
 
@@ -33,9 +18,17 @@ public class Follower : MonoBehaviour
 
   void FixedUpdate()
   {
-    var targetForward = (toFollow.transform.position - gameObject.transform.position).normalized;
-    var targetForwardVelocity = targetForward - gameObject.transform.forward;
-    forwardVelocity += (targetForwardVelocity - forwardVelocity) * rotationRate;
-    gameObject.transform.forward += forwardVelocity;
+    // Optimization: Only < 1 rate needs to track velocity & stuff
+    if (rotationRate >= 1.0f)
+    {
+      gameObject.transform.LookAt(toFollow.transform);
+    }
+    else
+    {
+      var targetForward = (toFollow.transform.position - gameObject.transform.position).normalized;
+      var targetForwardVelocity = targetForward - gameObject.transform.forward;
+      forwardVelocity += (targetForwardVelocity - forwardVelocity) * rotationRate;
+      gameObject.transform.forward += forwardVelocity;
+    }
   }
 }
