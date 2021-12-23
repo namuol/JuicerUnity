@@ -23,6 +23,17 @@ public class Player : MonoBehaviour
   private readonly int bulletPoolSize = 15;
   private List<GameObject> bulletPool;
 
+  // For keyboard controls, we want digital axes:
+  private static float ClampAxis(float axis)
+  {
+    if (axis == 0.0f)
+    {
+      return axis;
+    }
+
+    return axis > 0.0f ? 1.0f : -1.0f;
+  }
+
   void Awake()
   {
     body = GetComponent<Rigidbody>();
@@ -41,9 +52,9 @@ public class Player : MonoBehaviour
   void FixedUpdate()
   {
     HandleInput();
-
+    var targetVelocity = ((Vector3.left * horizMoveAxis) + (Vector3.back * vertMoveAxis)) * SPEED;
     // Movement
-    body.velocity = ((Vector3.left * horizMoveAxis) + (Vector3.back * vertMoveAxis)) * SPEED;
+    body.velocity += (targetVelocity - body.velocity) * 0.1f;
 
     // Weapons
     if (fired)
@@ -68,8 +79,8 @@ public class Player : MonoBehaviour
 
   void HandleInput()
   {
-    horizMoveAxis = Input.GetAxis("Horizontal");
-    vertMoveAxis = Input.GetAxis("Vertical");
+    horizMoveAxis = ClampAxis(Input.GetAxis("Horizontal"));
+    vertMoveAxis = ClampAxis(Input.GetAxis("Vertical"));
 
     // Basically reimplementing `GetButtonDown` but for `FixedUpdate`, here
     bool fireWasPressed = firePressed;
@@ -89,5 +100,6 @@ public class Player : MonoBehaviour
 
     bulletAudio.Play();
     bullet.Shoot(body.position, aimPoint.transform.position);
+    body.AddForce((body.position - aimPoint.transform.position).normalized * 5.0f, ForceMode.Impulse);
   }
 }

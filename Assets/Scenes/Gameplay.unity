@@ -1645,6 +1645,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 1847455517874544617, guid: 7d359045816b247e4be10891c5c47ade, type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2225409120893912236, guid: 7d359045816b247e4be10891c5c47ade, type: 3}
       propertyPath: toFollow
       value: 
