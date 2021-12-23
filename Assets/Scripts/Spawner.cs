@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +12,9 @@ public class Spawner : MonoBehaviour
 
   [SerializeField]
   private List<Collider> exclude;
+
+  [SerializeField]
+  private List<SpawnHandler> onSpawn;
 
   private Bounds spawnBounds;
   private bool spawnBoundsDirty;
@@ -48,6 +50,9 @@ public class Spawner : MonoBehaviour
     int attempts = 0;
     do
     {
+      point.x = Random.Range(spawnBounds.min.x, spawnBounds.max.x);
+      point.y = Random.Range(spawnBounds.min.y, spawnBounds.max.y);
+      point.z = Random.Range(spawnBounds.min.z, spawnBounds.max.z);
       ++attempts;
     } while (!PointInside(point) && attempts < 100);
 
@@ -56,13 +61,44 @@ public class Spawner : MonoBehaviour
 
   bool PointInside(Vector3 point)
   {
-    return true;
+    foreach (var excluded in exclude)
+    {
+      if (excluded.bounds.Contains(point) && excluded.ClosestPoint(point) == point)
+      {
+        return false;
+      }
+    }
+
+    var inside = false;
+    foreach (var included in include)
+    {
+      if (included.bounds.Contains(point) && included.ClosestPoint(point) == point)
+      {
+        inside = true;
+        break;
+      }
+    }
+
+    return inside;
   }
 
   public GameObject Spawn()
   {
     var obj = pool.GetObject();
+    if (!obj)
+    {
+      return null;
+    }
+
     obj.transform.position = GetRandomPoint();
+
+    foreach (var spawnHandler in onSpawn)
+    {
+      obj = spawnHandler.OnSpawn(obj);
+    }
+
+    obj.SetActive(true);
+
     return obj;
   }
 }

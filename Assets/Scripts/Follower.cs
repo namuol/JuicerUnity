@@ -8,16 +8,15 @@ using UnityEngine;
 
 public class Follower : MonoBehaviour
 {
-  [SerializeField]
-  private GameObject toFollow;
-
-  [SerializeField]
-  private float rotationRate = 1.0f;
+  public GameObject toFollow;
+  public float rotationRate = 1.0f;
 
   private Vector3 forwardVelocity = new(0, 0, 0);
 
   void FixedUpdate()
   {
+    if (!toFollow) return;
+
     // Optimization: Only < 1 rate needs to track velocity & stuff
     if (rotationRate >= 1.0f)
     {

@@ -14,8 +14,7 @@ public class ProbabilisticSpawner : MonoBehaviour
   {
     if (Random.Range(0.0f, 1.0f) < probabilityOfSpawnPerFrame)
     {
-      var obj = spawner.Spawn();
-      obj.SetActive(true);
+      spawner.Spawn();
     }
   }
 }
