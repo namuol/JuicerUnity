@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
 
-[Serializable]
 public class EnemySpawnHandler : SpawnHandler
 {
+  /// We mainly need this to pass the target object (usually the Player) to the
+  /// enemy, which then gets passed through to its various children.
   [SerializeField]
   private GameObject target;
 
