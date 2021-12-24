@@ -11,9 +11,14 @@ public class TakesDamage : MonoBehaviour
   private float defaultHitPoints = 1.0f;
   private float hitPoints;
 
-  void Awake()
+  public void Reset()
   {
     hitPoints = defaultHitPoints;
+  }
+
+  void Awake()
+  {
+    Reset();
   }
 
   private void OnCollisionEnter(Collision collision)
@@ -22,8 +27,18 @@ public class TakesDamage : MonoBehaviour
     if (damager) Damage(damager);
   }
 
+  private void OnTriggerEnter(Collider other)
+  {
+    var damager = other.gameObject.GetComponent<DealsDamage>();
+    if (damager) Damage(damager); else Debug.Log("NO DAMAGER (trigger)");
+  }
+
   public void Damage(DealsDamage damager)
   {
+    if (damager.gameObject.GetComponent<Explosion>() != null)
+    {
+      Debug.Log("Explode hit!");
+    }
     hitPoints -= damager.amount;
     foreach (var handler in onDamage)
     {
@@ -32,7 +47,6 @@ public class TakesDamage : MonoBehaviour
 
     if (hitPoints <= 0)
     {
-      hitPoints = defaultHitPoints;
       foreach (var handler in onDamage)
       {
         handler.OnFullyDamaged(damager);

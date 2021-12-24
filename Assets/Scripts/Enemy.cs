@@ -9,9 +9,18 @@ public class Enemy : MonoBehaviour
   public GameObject body;
   private Rigidbody rigidBody;
 
+  public AudioSource explodeSound;
+
+  public ObjectPool explosionPool;
+
   void Awake()
   {
     rigidBody = gameObject.GetComponent<Rigidbody>();
+  }
+
+  void OnEnable()
+  {
+    gameObject.GetComponent<TakesDamage>().Reset();
   }
 
   void FixedUpdate()
@@ -42,12 +51,25 @@ public class Enemy : MonoBehaviour
     rigidBody.velocity = new(0, 0, 0);
     rigidBody.angularVelocity = new(0, 0, 0);
     Wince();
-    body.GetComponent<Animator>().SetTrigger("Explode");
+    GetComponent<Animator>().SetTrigger("Explode");
+  }
+
+  public void Explode()
+  {
+    explodeSound.Play();
+    var explosion = explosionPool.GetObject();
+    explosion.transform.position = gameObject.transform.position;
+    explosion.SetActive(true);
+  }
+
+  public void Deactivate()
+  {
+    gameObject.SetActive(false);
   }
 
   public void Hit()
   {
-    body.GetComponent<Animator>().SetTrigger("Hit");
+    GetComponent<Animator>().SetTrigger("Hit");
     Wince();
   }
 
