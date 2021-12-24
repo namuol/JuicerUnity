@@ -6,12 +6,12 @@ public class Enemy : MonoBehaviour
 {
   public GameObject target;
   public List<GameObject> eyes;
-
-  private Rigidbody body;
+  public GameObject body;
+  private Rigidbody rigidBody;
 
   void Awake()
   {
-    body = gameObject.GetComponent<Rigidbody>();
+    rigidBody = gameObject.GetComponent<Rigidbody>();
   }
 
   public void SetTarget(GameObject target)
@@ -31,8 +31,8 @@ public class Enemy : MonoBehaviour
 
   public void Die()
   {
-    body.velocity = new(0, 0, 0);
-    body.angularVelocity = new(0, 0, 0);
+    rigidBody.velocity = new(0, 0, 0);
+    rigidBody.angularVelocity = new(0, 0, 0);
     gameObject.SetActive(false);
   }
 }
