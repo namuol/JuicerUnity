@@ -14,6 +14,14 @@ public class Enemy : MonoBehaviour
     rigidBody = gameObject.GetComponent<Rigidbody>();
   }
 
+  void FixedUpdate()
+  {
+    if (Random.Range(0.0f, 1.0f) < 0.001)
+    {
+      Blink();
+    }
+  }
+
   public void SetTarget(GameObject target)
   {
     this.target = target;
@@ -33,6 +41,29 @@ public class Enemy : MonoBehaviour
   {
     rigidBody.velocity = new(0, 0, 0);
     rigidBody.angularVelocity = new(0, 0, 0);
-    gameObject.SetActive(false);
+    Wince();
+    body.GetComponent<Animator>().SetTrigger("Explode");
+  }
+
+  public void Hit()
+  {
+    body.GetComponent<Animator>().SetTrigger("Hit");
+    Wince();
+  }
+
+  public void Wince()
+  {
+    foreach (var eye in eyes)
+    {
+      eye.GetComponent<Animator>().SetTrigger("Wince");
+    }
+  }
+
+  public void Blink()
+  {
+    foreach (var eye in eyes)
+    {
+      eye.GetComponent<Animator>().SetTrigger("Blink");
+    }
   }
 }

@@ -10,7 +10,7 @@ public class EnemyDamageHandler : DamageHandler
   public override void OnDamage(DealsDamage damager)
   {
     // Play a damage animation
-    enemy.body.GetComponent<Animator>().SetTrigger("Hit");
+    enemy.Hit();
   }
 
   public override void OnFullyDamaged(DealsDamage damager)
