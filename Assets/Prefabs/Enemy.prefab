@@ -108,7 +108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3571997229833286391}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -128,7 +128,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_Intensity: 0
-  m_Range: 10
+  m_Range: 5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -164,7 +164,7 @@ Light:
   m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2147483647
   m_RenderingLayerMask: 1
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
@@ -251,6 +251,7 @@ Transform:
   m_Children:
   - {fileID: 8336862769877814533}
   - {fileID: 3164958203851135907}
+  - {fileID: 3689676059301287187}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -281,7 +282,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!82 &3342339964016481640
 AudioSource:
@@ -488,7 +489,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toFollow: {fileID: 0}
-  rotationRate: 0.03
+  rotationRate: 0.001
 --- !u!114 &7203857993556190391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -521,6 +522,10 @@ MonoBehaviour:
   body: {fileID: 3854263764099562493}
   explodeSound: {fileID: 1638319152504041864}
   explosionPool: {fileID: 0}
+  feet: {fileID: 6723208503070042267}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &-2957476331923860376
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -548,7 +553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   onDamage:
   - {fileID: -2957476331923860376}
-  defaultHitPoints: 2
+  defaultHitPoints: 3
 --- !u!95 &5458602566761527573
 Animator:
   serializedVersion: 4
@@ -569,6 +574,37 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &6723208503070042267
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3689676059301287187}
+  m_Layer: 0
+  m_Name: Feet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3689676059301287187
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6723208503070042267}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7771468192177038923}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1977837734831492632
 PrefabInstance:
   m_ObjectHideFlags: 0

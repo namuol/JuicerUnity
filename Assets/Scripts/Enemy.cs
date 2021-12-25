@@ -7,51 +7,94 @@ public class Enemy : MonoBehaviour
   public GameObject target;
   public List<GameObject> eyes;
   public GameObject body;
-  private Rigidbody rigidBody;
-
   public AudioSource explodeSound;
-
   public ObjectPool explosionPool;
+  public GameObject feet;
+  public LayerMask groundMask;
+
+  private Rigidbody rigidBody;
+  private Animator animator;
+  private Follower follower;
 
   void Awake()
   {
     rigidBody = gameObject.GetComponent<Rigidbody>();
+    animator = gameObject.GetComponent<Animator>();
+    follower = gameObject.GetComponent<Follower>();
   }
 
   void OnEnable()
   {
     gameObject.GetComponent<TakesDamage>().Reset();
+    rigidBody.isKinematic = false;
+  }
+
+  bool HasFooting()
+  {
+    var pos = gameObject.transform.position;
+    return Physics.Raycast(pos, gameObject.transform.TransformDirection(Vector3.down), 0.6f, groundMask);
+  }
+
+  bool TouchingGround()
+  {
+    return Physics.Raycast(gameObject.transform.position, Vector3.down, 0.8f, groundMask);
   }
 
   void FixedUpdate()
   {
-    if (Random.Range(0.0f, 1.0f) < 0.001)
+
+    if (Random.Range(0.0f, 1.0f) < 0.002)
     {
       Blink();
+      // rigidBody.AddForce(Vector3.up * 20.0f, ForceMode.Impulse);
     }
+
+    var hasFooting = HasFooting();
+    if (!animator.GetBool("Walking") && hasFooting)
+    {
+      animator.SetBool("Walking", true);
+    }
+    if (animator.GetBool("Walking") && !hasFooting)
+    {
+      animator.SetBool("Walking", false);
+    }
+
+    // Helps enemy self-right itself:
+    var touchingGround = hasFooting || TouchingGround();
+    if (touchingGround)
+    {
+      Follow(target);
+    }
+    else
+    {
+      Follow(null);
+    }
+
   }
 
   public void SetTarget(GameObject target)
   {
     this.target = target;
-    if (target)
-    {
-      var follower = gameObject.GetComponent<Follower>();
-      follower.toFollow = target;
+  }
 
-      foreach (var eye in eyes)
+  private void Follow(GameObject target)
+  {
+    follower.toFollow = target;
+
+    foreach (var eye in eyes)
+    {
+      eye.GetComponent<Follower>().toFollow = target;
+      if (target == null)
       {
-        eye.GetComponent<Follower>().toFollow = target;
+        eye.transform.rotation.Set(0, 0, 0, 0);
       }
     }
   }
 
   public void Die()
   {
-    rigidBody.velocity = new(0, 0, 0);
-    rigidBody.angularVelocity = new(0, 0, 0);
     Wince();
-    GetComponent<Animator>().SetTrigger("Explode");
+    animator.SetTrigger("Explode");
   }
 
   public void Explode()
@@ -64,6 +107,9 @@ public class Enemy : MonoBehaviour
 
   public void Deactivate()
   {
+    Debug.Log("Deactivate!");
+    rigidBody.isKinematic = true;
+    gameObject.transform.forward = Vector3.forward;
     gameObject.SetActive(false);
   }
 
@@ -87,5 +133,11 @@ public class Enemy : MonoBehaviour
     {
       eye.GetComponent<Animator>().SetTrigger("Blink");
     }
+  }
+
+  public void Step()
+  {
+    var direction = (target.transform.position - gameObject.transform.position).normalized;
+    rigidBody.AddForce(direction * 4.0f, ForceMode.VelocityChange);
   }
 }
